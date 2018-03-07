@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +23,9 @@ public class MainActivity extends AppCompatActivity {
     List<Double> listOfNumbersEntered = new ArrayList<>();
     List<Character> listOfCharsEntered = new ArrayList<>();
     List<String> history = new ArrayList<>();
+
     int countOfHistory = 1;
+
 
     public static String format(double d)
     {
@@ -42,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
         final EditText editText = findViewById(R.id.editText);
         final TextView textView = findViewById(R.id.textView2);
         final TextView textViewHistory = findViewById(R.id.textView5);
+        final ScrollView scrollView = findViewById(R.id.scroolView);
+
         final Button button1 = findViewById(R.id.button1);
         final Button button2 = findViewById(R.id.button2);
         final Button button3 = findViewById(R.id.button3);
@@ -75,6 +80,29 @@ public class MainActivity extends AppCompatActivity {
                         textViewHistory.setVisibility(View.INVISIBLE);
                     } else {
                         textViewHistory.setVisibility(View.VISIBLE);
+                    }
+
+                    if(scrollView.getVisibility() == View.VISIBLE) {
+                        scrollView.setVisibility(View.INVISIBLE);
+                    } else {
+                        scrollView.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
+
+            textViewHistory.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+
+                    if(textViewHistory.getVisibility() == View.VISIBLE) {
+                        textViewHistory.setVisibility(View.INVISIBLE);
+                    } else {
+                        textViewHistory.setVisibility(View.VISIBLE);
+                    }
+
+                    if(scrollView.getVisibility() == View.VISIBLE) {
+                        scrollView.setVisibility(View.INVISIBLE);
+                    } else {
+                        scrollView.setVisibility(View.VISIBLE);
                     }
                 }
             });
@@ -182,11 +210,6 @@ public class MainActivity extends AppCompatActivity {
                     if(!editText.getText().toString().equals("") || listOfNumbersEntered.size()>1) {
                         listOfNumbersEntered.add(Double.parseDouble(editText.getText().toString()));
 
-                        if(textViewHistory.getLineCount()>=9) {
-                            history.clear();
-                            textViewHistory.setText("");
-                        }
-
                         if(listOfNumbersEntered.size()>1) {
                             history.add("#" + String.valueOf(countOfHistory) + " | ");
                             countOfHistory++;
@@ -231,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
 
                             history.set(history.size() - 1, history.get(history.size() - 1) + " = " + String.valueOf(format(equal)));
 
-                            textViewHistory.setText(textViewHistory.getText() + history.get(history.size() - 1) + "\n");
+                            textViewHistory.setText(history.get(history.size() - 1) + "\n" + textViewHistory.getText());
                         }
                         listOfNumbersEntered.clear();
                         listOfCharsEntered.clear();
@@ -277,11 +300,6 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     if (!editText.getText().toString().equals("")) {
 
-                        if(textViewHistory.getLineCount()>=9) {
-                            history.clear();
-                            textViewHistory.setText("");
-                        }
-
                         history.add("#" + String.valueOf(countOfHistory) + " | ");
                         countOfHistory++;
                         history.set(history.size() - 1, history.get(history.size() - 1) + String.valueOf(editText.getText()) + "² = ");
@@ -289,7 +307,7 @@ public class MainActivity extends AppCompatActivity {
                         textView.setText("");
 
                         history.set(history.size() - 1, history.get(history.size() - 1) + String.valueOf(editText.getText()));
-                        textViewHistory.setText(textViewHistory.getText() + history.get(history.size() - 1) + "\n");
+                        textViewHistory.setText(history.get(history.size() - 1) + "\n" + textViewHistory.getText());
                     }
                 }
             });
@@ -298,18 +316,13 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     if(!editText.getText().toString().equals("") ) {
 
-                        if(textViewHistory.getLineCount()>=9) {
-                            history.clear();
-                            textViewHistory.setText("");
-                        }
-
                         history.add("#" + String.valueOf(countOfHistory) + " | ");
                         countOfHistory++;
                         history.set(history.size() - 1, history.get(history.size() - 1) + "√" + String.valueOf(editText.getText()) + " = ");
                         editText.setText(String.valueOf(format(sqrt(Double.parseDouble(editText.getText().toString())))));
                         textView.setText("");
                         history.set(history.size() - 1, history.get(history.size() - 1) + String.valueOf(editText.getText()));
-                        textViewHistory.setText(textViewHistory.getText() + history.get(history.size() - 1) + "\n");
+                        textViewHistory.setText(history.get(history.size() - 1) + "\n" + textViewHistory.getText());
                     }
                 }
             });
