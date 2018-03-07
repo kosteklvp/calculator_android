@@ -61,9 +61,11 @@ public class MainActivity extends AppCompatActivity {
         final Button button_equals = findViewById(R.id.button_equals);
         final Button button_dot = findViewById(R.id.button_dot);
         editText.setKeyListener(null);
+        getSupportActionBar().setTitle("Kalkulator by Piotr Kostański");
 
 
-            editText.setOnClickListener(new View.OnClickListener() {
+
+        editText.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Toast toast = Toast.makeText(getApplicationContext(), "Autor: Piotr Kostański", Toast.LENGTH_SHORT);
                     toast.show();
@@ -133,12 +135,14 @@ public class MainActivity extends AppCompatActivity {
             buttonB.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     editText.setText(editText.getText().subSequence(0, editText.getText().length()-1));
+                    textView.setText("");
                 }
             });
 
             buttonC.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     editText.getText().clear();
+                    textView.setText("");
                 }
             });
 
@@ -151,14 +155,12 @@ public class MainActivity extends AppCompatActivity {
             button_divide.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     if(!editText.getText().toString().equals("") ) {
-
                         listOfNumbersEntered.add(Double.parseDouble(editText.getText().toString()));
                         listOfCharsEntered.add('/');
                         editText.getText().clear();
                         textView.setText("/");
                     }
 
-                    if()
                 }
             });
 
@@ -202,46 +204,59 @@ public class MainActivity extends AppCompatActivity {
                         }
                         listOfNumbersEntered.clear();
                         listOfCharsEntered.clear();
+                        textView.setText("");
                     }
                 }
             });
 
             button_minus.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    listOfNumbersEntered.add(Double.parseDouble(editText.getText().toString()));
-                    listOfCharsEntered.add('-');
-                    editText.getText().clear();
-                    textView.setText("-");
+                    if(!editText.getText().toString().equals("") ) {
+                        listOfNumbersEntered.add(Double.parseDouble(editText.getText().toString()));
+                        listOfCharsEntered.add('-');
+                        editText.getText().clear();
+                        textView.setText("-");
+                    }
                 }
             });
 
             button_multiply.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    listOfNumbersEntered.add(Double.parseDouble(editText.getText().toString()));
-                    listOfCharsEntered.add('*');
-                    editText.getText().clear();
-                    textView.setText("x");
+                    if(!editText.getText().toString().equals("") ) {
+                        listOfNumbersEntered.add(Double.parseDouble(editText.getText().toString()));
+                        listOfCharsEntered.add('*');
+                        editText.getText().clear();
+                        textView.setText("x");
+                    }
                 }
             });
 
             button_plus.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    listOfNumbersEntered.add(Double.parseDouble(editText.getText().toString()));
-                    listOfCharsEntered.add('+');
-                    editText.getText().clear();
-                    textView.setText("+");
+                    if(!editText.getText().toString().equals("") ) {
+                        listOfNumbersEntered.add(Double.parseDouble(editText.getText().toString()));
+                        listOfCharsEntered.add('+');
+                        editText.getText().clear();
+                        textView.setText("+");
+                    }
                 }
             });
 
             button_square.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    editText.setText(String.valueOf(format(pow(Double.parseDouble(editText.getText().toString()),2))));
+                    if (!editText.getText().toString().equals("")) {
+                        editText.setText(String.valueOf(format(pow(Double.parseDouble(editText.getText().toString()), 2))));
+                        textView.setText("");
+                    }
                 }
             });
 
             button_squareroot.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    editText.setText(String.valueOf(format(sqrt(Double.parseDouble(editText.getText().toString())))));
+                    if(!editText.getText().toString().equals("") ) {
+                        editText.setText(String.valueOf(format(sqrt(Double.parseDouble(editText.getText().toString())))));
+                        textView.setText("");
+                    }
                 }
             });
 
