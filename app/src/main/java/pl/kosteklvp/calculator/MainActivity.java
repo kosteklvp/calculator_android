@@ -5,18 +5,31 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.lang.Math;
+
+import static java.lang.Math.addExact;
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
 
 public class MainActivity extends AppCompatActivity {
 
 
 
-    List<Float> listOfNumbersEntered = new ArrayList<>();
+    List<Double> listOfNumbersEntered = new ArrayList<>();
     List<Character> listOfCharsEntered = new ArrayList<>();
 
+
+    public static String format(double d)
+    {
+        if(d == (long) d)
+            return String.format("%d",(long)d);
+        else
+            return String.format("%s",d);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         final EditText editText = findViewById(R.id.editText);
+        final TextView textView = findViewById(R.id.textView2);
         final Button button1 = findViewById(R.id.button1);
         final Button button2 = findViewById(R.id.button2);
         final Button button3 = findViewById(R.id.button3);
@@ -49,6 +63,12 @@ public class MainActivity extends AppCompatActivity {
         editText.setKeyListener(null);
 
 
+            editText.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Toast toast = Toast.makeText(getApplicationContext(), "Autor: Piotr Kostański", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            });
 
             button1.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -130,86 +150,98 @@ public class MainActivity extends AppCompatActivity {
 
             button_divide.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    listOfNumbersEntered.add(Float.parseFloat(editText.getText().toString()));
-                    listOfCharsEntered.add('/');
-                    editText.getText().clear();
+                    if(!editText.getText().toString().equals("") ) {
+
+                        listOfNumbersEntered.add(Double.parseDouble(editText.getText().toString()));
+                        listOfCharsEntered.add('/');
+                        editText.getText().clear();
+                        textView.setText("/");
+                    }
+
+                    if()
                 }
             });
 
             button_equals.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    listOfNumbersEntered.add(Float.parseFloat(editText.getText().toString()));
 
-                    float equal = 0;
+                    if(!editText.getText().toString().equals("") ) {
+                        listOfNumbersEntered.add(Double.parseDouble(editText.getText().toString()));
 
-                    for(int i=0; i<listOfNumbersEntered.size(); i++) {
-                        switch (listOfCharsEntered.get(i)) {
+                        double equal = 0;
 
-                            case '+':
-                                equal = equal + listOfNumbersEntered.get(i);
-                                break;
+                        for (int i = 0; i < listOfNumbersEntered.size() - 1; i++) {
+                            switch (listOfCharsEntered.get(i)) {
 
-                            case '-':
-                                equal = equal - listOfNumbersEntered.get(i);
-                                break;
+                                case '+':
+                                    listOfNumbersEntered.set(i + 1, listOfNumbersEntered.get(i) + listOfNumbersEntered.get(i + 1));
 
-                            case '*':
-                                equal = equal * listOfNumbersEntered.get(i);
-                                break;
+                                    equal = listOfNumbersEntered.get(i + 1);
+                                    break;
 
-                            case '/':
-                                equal = equal / listOfNumbersEntered.get(i);
-                                break;
+                                case '-':
+                                    listOfNumbersEntered.set(i + 1, listOfNumbersEntered.get(i) - listOfNumbersEntered.get(i + 1));
+                                    equal = listOfNumbersEntered.get(i + 1);
+                                    break;
 
-                            case '2':
-                                equal = equal * equal;
-                                break;
+                                case '*':
+                                    listOfNumbersEntered.set(i + 1, listOfNumbersEntered.get(i) * listOfNumbersEntered.get(i + 1));
+                                    equal = listOfNumbersEntered.get(i + 1);
+                                    break;
 
-                            case 'v':
-                                break;
+                                case '/':
+                                    listOfNumbersEntered.set(i + 1, listOfNumbersEntered.get(i) / listOfNumbersEntered.get(i + 1));
+                                    equal = listOfNumbersEntered.get(i + 1);
+                                    break;
+
+                            }
                         }
+
+                        if(equal!=0) {
+                            editText.setText(String.valueOf(format(equal)));
+                        }
+                        listOfNumbersEntered.clear();
+                        listOfCharsEntered.clear();
                     }
-                    editText.setText((int) equal);
                 }
             });
 
             button_minus.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    listOfNumbersEntered.add(Float.parseFloat(editText.getText().toString()));
+                    listOfNumbersEntered.add(Double.parseDouble(editText.getText().toString()));
                     listOfCharsEntered.add('-');
                     editText.getText().clear();
+                    textView.setText("-");
                 }
             });
 
             button_multiply.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    listOfNumbersEntered.add(Float.parseFloat(editText.getText().toString()));
+                    listOfNumbersEntered.add(Double.parseDouble(editText.getText().toString()));
                     listOfCharsEntered.add('*');
                     editText.getText().clear();
+                    textView.setText("x");
                 }
             });
 
             button_plus.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    listOfNumbersEntered.add(Float.parseFloat(editText.getText().toString()));
+                    listOfNumbersEntered.add(Double.parseDouble(editText.getText().toString()));
                     listOfCharsEntered.add('+');
                     editText.getText().clear();
+                    textView.setText("+");
                 }
             });
 
             button_square.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    listOfNumbersEntered.add(Float.parseFloat(editText.getText().toString()));
-                    listOfCharsEntered.add('2');
-                    editText.getText().clear();
+                    editText.setText(String.valueOf(format(pow(Double.parseDouble(editText.getText().toString()),2))));
                 }
             });
 
             button_squareroot.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    listOfNumbersEntered.add(Float.parseFloat(editText.getText().toString()));
-                    listOfCharsEntered.add('v');
-                    editText.getText().clear();
+                    editText.setText(String.valueOf(format(sqrt(Double.parseDouble(editText.getText().toString())))));
                 }
             });
 
