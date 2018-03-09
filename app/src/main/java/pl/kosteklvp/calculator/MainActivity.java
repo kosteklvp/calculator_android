@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         final Button button_equals = findViewById(R.id.button_equals);
         final Button button_dot = findViewById(R.id.button_dot);
         editText.setKeyListener(null);
-        getSupportActionBar().setTitle("Kalkulator Piotr Kostański");
+        getSupportActionBar().setTitle(R.string.xxx);
 
 
 
