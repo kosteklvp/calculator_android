@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +22,9 @@ public class MainActivity extends AppCompatActivity {
 
     List<Double> listOfNumbersEntered = new ArrayList<>();
     List<Character> listOfCharsEntered = new ArrayList<>();
+    List<String> history = new ArrayList<>();
+
+    int countOfHistory = 1;
 
 
     public static String format(double d)
@@ -40,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
 
         final EditText editText = findViewById(R.id.editText);
         final TextView textView = findViewById(R.id.textView2);
+        final TextView textViewHistory = findViewById(R.id.textView5);
+        final ScrollView scrollView = findViewById(R.id.scroolView);
+
         final Button button1 = findViewById(R.id.button1);
         final Button button2 = findViewById(R.id.button2);
         final Button button3 = findViewById(R.id.button3);
@@ -61,14 +68,42 @@ public class MainActivity extends AppCompatActivity {
         final Button button_equals = findViewById(R.id.button_equals);
         final Button button_dot = findViewById(R.id.button_dot);
         editText.setKeyListener(null);
-        getSupportActionBar().setTitle("Kalkulator by Piotr Kostański");
+        getSupportActionBar().setTitle(R.string.xxx);
 
 
 
-        editText.setOnClickListener(new View.OnClickListener() {
+
+            editText.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    Toast toast = Toast.makeText(getApplicationContext(), "Autor: Piotr Kostański", Toast.LENGTH_SHORT);
-                    toast.show();
+
+                    if(textViewHistory.getVisibility() == View.VISIBLE) {
+                        textViewHistory.setVisibility(View.INVISIBLE);
+                    } else {
+                        textViewHistory.setVisibility(View.VISIBLE);
+                    }
+
+                    if(scrollView.getVisibility() == View.VISIBLE) {
+                        scrollView.setVisibility(View.INVISIBLE);
+                    } else {
+                        scrollView.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
+
+            textViewHistory.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+
+                    if(textViewHistory.getVisibility() == View.VISIBLE) {
+                        textViewHistory.setVisibility(View.INVISIBLE);
+                    } else {
+                        textViewHistory.setVisibility(View.VISIBLE);
+                    }
+
+                    if(scrollView.getVisibility() == View.VISIBLE) {
+                        scrollView.setVisibility(View.INVISIBLE);
+                    } else {
+                        scrollView.setVisibility(View.VISIBLE);
+                    }
                 }
             });
 
@@ -134,15 +169,19 @@ public class MainActivity extends AppCompatActivity {
 
             buttonB.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    editText.setText(editText.getText().subSequence(0, editText.getText().length()-1));
-                    textView.setText("");
+                    if(!editText.getText().toString().equals("") ) {
+                        editText.setText(editText.getText().subSequence(0, editText.getText().length() - 1));
+                        textView.setText("");
+                    }
                 }
             });
 
             buttonC.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    editText.getText().clear();
-                    textView.setText("");
+                    if(!editText.getText().toString().equals("") ) {
+                        editText.getText().clear();
+                        textView.setText("");
+                    }
                 }
             });
 
@@ -167,8 +206,15 @@ public class MainActivity extends AppCompatActivity {
             button_equals.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
-                    if(!editText.getText().toString().equals("") ) {
+
+                    if(!editText.getText().toString().equals("") || listOfNumbersEntered.size()>1) {
                         listOfNumbersEntered.add(Double.parseDouble(editText.getText().toString()));
+
+                        if(listOfNumbersEntered.size()>1) {
+                            history.add("#" + String.valueOf(countOfHistory) + " | ");
+                            countOfHistory++;
+                            history.set(history.size() - 1, history.get(history.size() - 1) + String.valueOf(format(listOfNumbersEntered.get(0))));
+                        }
 
                         double equal = 0;
 
@@ -177,30 +223,38 @@ public class MainActivity extends AppCompatActivity {
 
                                 case '+':
                                     listOfNumbersEntered.set(i + 1, listOfNumbersEntered.get(i) + listOfNumbersEntered.get(i + 1));
-
+                                    history.set(history.size()-1, history.get(history.size()-1) + " + " + String.valueOf(format(listOfNumbersEntered.get(i + 1) - listOfNumbersEntered.get(i))));
                                     equal = listOfNumbersEntered.get(i + 1);
                                     break;
 
                                 case '-':
                                     listOfNumbersEntered.set(i + 1, listOfNumbersEntered.get(i) - listOfNumbersEntered.get(i + 1));
+                                    history.set(history.size()-1, history.get(history.size()-1) + " - " + String.valueOf(format(listOfNumbersEntered.get(i) - listOfNumbersEntered.get(i+1))));
                                     equal = listOfNumbersEntered.get(i + 1);
                                     break;
 
                                 case '*':
                                     listOfNumbersEntered.set(i + 1, listOfNumbersEntered.get(i) * listOfNumbersEntered.get(i + 1));
+                                    history.set(history.size()-1, history.get(history.size()-1) + " x " + String.valueOf(format(listOfNumbersEntered.get(i + 1) / listOfNumbersEntered.get(i))));
                                     equal = listOfNumbersEntered.get(i + 1);
                                     break;
 
                                 case '/':
                                     listOfNumbersEntered.set(i + 1, listOfNumbersEntered.get(i) / listOfNumbersEntered.get(i + 1));
+                                    history.set(history.size()-1, history.get(history.size()-1) + " / " + String.valueOf(format(listOfNumbersEntered.get(i) / listOfNumbersEntered.get(i+1))));
                                     equal = listOfNumbersEntered.get(i + 1);
                                     break;
 
                             }
+
                         }
 
-                        if(equal!=0) {
+                        if(listOfNumbersEntered.size()>1) {
                             editText.setText(String.valueOf(format(equal)));
+
+                            history.set(history.size() - 1, history.get(history.size() - 1) + " = " + String.valueOf(format(equal)));
+
+                            textViewHistory.setText(history.get(history.size() - 1) + "\n" + textViewHistory.getText());
                         }
                         listOfNumbersEntered.clear();
                         listOfCharsEntered.clear();
@@ -245,8 +299,15 @@ public class MainActivity extends AppCompatActivity {
             button_square.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     if (!editText.getText().toString().equals("")) {
+
+                        history.add("#" + String.valueOf(countOfHistory) + " | ");
+                        countOfHistory++;
+                        history.set(history.size() - 1, history.get(history.size() - 1) + String.valueOf(editText.getText()) + "² = ");
                         editText.setText(String.valueOf(format(pow(Double.parseDouble(editText.getText().toString()), 2))));
                         textView.setText("");
+
+                        history.set(history.size() - 1, history.get(history.size() - 1) + String.valueOf(editText.getText()));
+                        textViewHistory.setText(history.get(history.size() - 1) + "\n" + textViewHistory.getText());
                     }
                 }
             });
@@ -254,8 +315,14 @@ public class MainActivity extends AppCompatActivity {
             button_squareroot.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     if(!editText.getText().toString().equals("") ) {
+
+                        history.add("#" + String.valueOf(countOfHistory) + " | ");
+                        countOfHistory++;
+                        history.set(history.size() - 1, history.get(history.size() - 1) + "√" + String.valueOf(editText.getText()) + " = ");
                         editText.setText(String.valueOf(format(sqrt(Double.parseDouble(editText.getText().toString())))));
                         textView.setText("");
+                        history.set(history.size() - 1, history.get(history.size() - 1) + String.valueOf(editText.getText()));
+                        textViewHistory.setText(history.get(history.size() - 1) + "\n" + textViewHistory.getText());
                     }
                 }
             });
