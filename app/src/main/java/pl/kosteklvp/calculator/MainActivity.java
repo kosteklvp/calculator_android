@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     List<Double> listOfNumbersEntered = new ArrayList<>();
     List<Character> listOfCharsEntered = new ArrayList<>();
-    List<String> history = new ArrayList<>();
+    ArrayList<String> history = new ArrayList<>();
 
     int countOfHistory = 1;
 
@@ -69,8 +69,7 @@ public class MainActivity extends AppCompatActivity {
         final Button button_dot = findViewById(R.id.button_dot);
         editText.setKeyListener(null);
         getSupportActionBar().setTitle(R.string.xxx);
-
-
+        textViewHistory.setVisibility(View.INVISIBLE);
 
 
             editText.setOnClickListener(new View.OnClickListener() {
@@ -330,5 +329,48 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+
+        ArrayList<String> listOfNumbersEnteredStrings = new ArrayList<>();
+        ArrayList<String> listOfCharsEnteredStrings = new ArrayList<>();
+
+        for(int i=0; i<listOfNumbersEntered.size(); i++) {
+            listOfNumbersEnteredStrings.add(String.valueOf(listOfNumbersEntered.get(i)));
+        }
+
+        for(int i=0; i<listOfCharsEntered.size(); i++) {
+            listOfCharsEnteredStrings.add(String.valueOf(listOfCharsEntered.get(i)));
+        }
+
+        savedInstanceState.putStringArrayList("listOfNumbersEnteredInstance", listOfNumbersEnteredStrings);
+        savedInstanceState.putStringArrayList("listOfCharsEnteredInstance", listOfCharsEnteredStrings);
+
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+
+        super.onRestoreInstanceState(savedInstanceState);
+
+        ArrayList<String> listOfNumbers = savedInstanceState.getStringArrayList("listOfNumbersEnteredInstance");
+        ArrayList<String> listOfChars = savedInstanceState.getStringArrayList("listOfCharsEnteredInstance");
+
+        List<Double> listOfNumbersEnteredDoubles = new ArrayList<>();
+        List<Character> listOfCharsEnteredChars = new ArrayList<>();
+
+        for(int i=0; i<listOfNumbers.size(); i++) {
+            listOfNumbersEnteredDoubles.add(Double.valueOf(String.valueOf(listOfNumbers.get(i))));
+        }
+
+        for(int i=0; i<listOfChars.size(); i++) {
+            listOfCharsEnteredChars.add(listOfChars.get(i).charAt(0));
+        }
+
+        listOfNumbersEntered = listOfNumbersEnteredDoubles;
+        listOfCharsEntered = listOfCharsEnteredChars;
+
+    }
 
 }
