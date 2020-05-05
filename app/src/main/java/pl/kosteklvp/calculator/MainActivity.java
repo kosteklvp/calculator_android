@@ -2,6 +2,7 @@ package pl.kosteklvp.calculator;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -9,7 +10,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import static java.lang.Math.addExact;
@@ -23,8 +26,8 @@ public class MainActivity extends AppCompatActivity {
     List<Double> listOfNumbersEntered = new ArrayList<>();
     List<Character> listOfCharsEntered = new ArrayList<>();
     List<String> history = new ArrayList<>();
-
     int countOfHistory = 1;
+    String textViewSmall;
 
 
     public static String format(double d)
@@ -198,6 +201,7 @@ public class MainActivity extends AppCompatActivity {
                         listOfCharsEntered.add('/');
                         editText.getText().clear();
                         textView.setText("/");
+                        textViewSmall = "/";
                     }
 
                 }
@@ -259,6 +263,7 @@ public class MainActivity extends AppCompatActivity {
                         listOfNumbersEntered.clear();
                         listOfCharsEntered.clear();
                         textView.setText("");
+                        textViewSmall = "";
                     }
                 }
             });
@@ -270,6 +275,7 @@ public class MainActivity extends AppCompatActivity {
                         listOfCharsEntered.add('-');
                         editText.getText().clear();
                         textView.setText("-");
+                        textViewSmall = "-";
                     }
                 }
             });
@@ -281,6 +287,7 @@ public class MainActivity extends AppCompatActivity {
                         listOfCharsEntered.add('*');
                         editText.getText().clear();
                         textView.setText("x");
+                        textViewSmall = "x";
                     }
                 }
             });
@@ -292,6 +299,7 @@ public class MainActivity extends AppCompatActivity {
                         listOfCharsEntered.add('+');
                         editText.getText().clear();
                         textView.setText("+");
+                        textViewSmall = "+";
                     }
                 }
             });
@@ -330,5 +338,79 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void onSaveInstanceState(Bundle savedInstanceState) {
 
+        savedInstanceState.putString("editTextSmall", textViewSmall);
+
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private Calendar calendar = Calendar.getInstance();
+    private String time;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        time = sdf.format(calendar.getTime());
+        Log.d("LAB1_KALKULATOR", time.toString() + "wywalanie metody onResume()");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        time = sdf.format(calendar.getTime());
+        Log.v("LAB1_KALKULATOR", time.toString() + "wywalanie metody onStart()");
+        Log.e("LAB1_KALKULATOR", time.toString() + "wywalanie metody onStart()");
+        Log.i("LAB1_KALKULATOR", time.toString() + "wywalanie metody onStart()");
+        Log.wtf("LAB1_KALKULATOR", time.toString() + "wywalanie metody onStart()");
+        Log.w("LAB1_KALKULATOR", time.toString() + "wywalanie metody onStart()");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        time = sdf.format(calendar.getTime());
+        Log.d("LAB1_KALKULATOR", time.toString() + "wywalanie metody onStop()");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        time = sdf.format(calendar.getTime());
+        Log.d("LAB1_KALKULATOR", time.toString() + "wywalanie metody onDestroy()");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        time = sdf.format(calendar.getTime());
+        Log.d("LAB1_KALKULATOR", time.toString() + "wywalanie metody onPause()");
+    }
+
+    public static int dodawanieLiczb(int l1, int l2) {
+        return l1 + l2;
+    }
+
+    public static int odejmowanieLiczb(int l1, int l2) {
+        return l1 - l2;
+    }
+
+    public static int mnozenieLiczb(int l1, int l2) {
+        return l1 * l2;
+    }
+
+    public static int dzielenieLiczb(int l1, int l2) throws Exception {
+        if (l2 == 0) {
+            throw new Exception("Nie można dzielić przez zero");
+        }
+        return l1/l2;
+    }
+
+    public static float dzielenieLiczb(float l1, float l2) throws Exception {
+        if (l2 == 0) {
+            throw new Exception("Nie można dzielić przez zero");
+        }
+        return l1/l2;
+    }
 }
